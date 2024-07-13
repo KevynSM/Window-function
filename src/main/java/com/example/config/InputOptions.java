@@ -1,4 +1,4 @@
-package com.example;
+package com.example.config;
 
 import lombok.*;
 import picocli.CommandLine.Option;
@@ -9,7 +9,7 @@ import java.io.File;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CLI {
+public class InputOptions {
 
     @Option(names = "--input_file", description = "Input file", required = true)
     private File file;
