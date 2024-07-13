@@ -11,9 +11,11 @@ import java.io.File;
 @AllArgsConstructor
 public class InputOptions {
 
+    // Specifies the input file containing translation data.
     @Option(names = "--input_file", description = "Input file", required = true)
     private File file;
 
+    // Specifies the size of the time window for calculations.
     @Option(names = "--window_size", description = "window size", required = true)
     private int windowSize;
 }

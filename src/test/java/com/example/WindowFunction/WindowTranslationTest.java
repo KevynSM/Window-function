@@ -15,24 +15,36 @@ import static org.junit.Assert.assertEquals;
 
 public class WindowTranslationTest {
 
+    // DateTimeFormatter for parsing input date-time strings
     DateTimeFormatter dateTimeFormatterInput = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+
+    // DateTimeFormatter for formatting output date-time strings
     DateTimeFormatter dateTimeFormatterOutput = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Test
     public void getAvgPerWindowSize() {
+        // Get the expected results for comparison
         List<AveragePerMinute> expectedResult = getExpectedResult();
+
+        // Get the list of translation events to test
         List<Translation> translationList = getTranslationList();
 
+        // Determine the start and end time for the window function
         LocalDateTime start = getStart(translationList);
         LocalDateTime end = getEnd(translationList);
 
+        // Calculate the average delivery times per minute within the window
         List<AveragePerMinute> results = getAveragePerMinutes(start, end, translationList);
 
+        // Assert that the expected results match the actual results
         assertExpectedIsEqualToResult(expectedResult, results);
     }
 
     private static void assertExpectedIsEqualToResult(List<AveragePerMinute> expectedResult, List<AveragePerMinute> results) {
+        // Check that the sizes of both lists are equal
         assertEquals(expectedResult.size(), results.size());
+
+        // Compare each element's date and average delivery time
         for (int i = 0; i < expectedResult.size(); i++) {
             assertEquals(expectedResult.get(i).getDate(), results.get(i).getDate());
             assertEquals(expectedResult.get(i).getAverageDeliveryTime(), results.get(i).getAverageDeliveryTime(), 0.001);
@@ -41,9 +53,9 @@ public class WindowTranslationTest {
 
     private static List<AveragePerMinute> getAveragePerMinutes(LocalDateTime start, LocalDateTime end, List<Translation> translationList) {
         List<AveragePerMinute> results = new ArrayList<>();
-        WindowTranslation windowTranslation = new WindowTranslation(10);
+        WindowTranslation windowTranslation = new WindowTranslation(10, translationList);
         while(!start.isAfter(end)) {
-            double avg = windowTranslation.getAvgPerWindowSize(translationList, start);
+            double avg = windowTranslation.getAvgPerWindowSize(start);
             results.add(new AveragePerMinute(start, avg));
             start = start.plusMinutes(1);
         }

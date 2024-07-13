@@ -18,23 +18,27 @@ import static com.example.utils.FileParser.toJsonString;
 
 public class App {
     public static void main( String[] args ) {
-        // First we parse the args (json file and window size value)
+        // First, we parse the command-line arguments, which include the JSON file path
+        // and the size of the time window for calculations.
         InputOptions inputOptions = new InputOptions();
         new CommandLine(inputOptions).parseArgs(args);
 
-        // Secondly, we parse the json file
+        // Second, we read and parse the JSON file to obtain a list of Translation objects.
         List<Translation> translationList = Arrays.asList(readTranslationFromFile(inputOptions.getFile()));
 
-        // thirdly, we get the range of which the window function will run
+        // Third, we determine the time range (start and end times) for the window function
+        // based on the timestamps of the translations in the list.
         LocalDateTime start = getStart(translationList);
         LocalDateTime end = getEnd(translationList);
 
-        // Finally, we calculate the avg per window size in each minute inside the range,
-        // and we print the result
-        WindowTranslation windowTranslation = new WindowTranslation(inputOptions.getWindowSize());
-        while(!start.isAfter(end)) {
-            double avg = windowTranslation.getAvgPerWindowSize(translationList, start);
+        // Finally, we iterate through each minute in the specified time range to calculate
+        // the average duration of translations and print the results as JSON.
+        WindowTranslation windowTranslation = new WindowTranslation(inputOptions.getWindowSize(), translationList);
+        while (!start.isAfter(end)) {
+            double avg = windowTranslation.getAvgPerWindowSize(start);
+            // Print the average delivery time for the current minute in JSON format
             System.out.println(toJsonString(new AveragePerMinute(start, avg)));
+            // Move to the next minute
             start = start.plusMinutes(1);
         }
     }
