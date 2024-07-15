@@ -15,7 +15,7 @@ cd RUN_AND_TEST
 Then, run the application using:
 
 ```bash
-java -jar window-function-1.0-SNAPSHOT.jar --input_file ./input.json --window_size 10
+java -jar window-function-1.0.1.jar --input_file ./input.json --window_size 10
 ```
 
 ## Prerequisites

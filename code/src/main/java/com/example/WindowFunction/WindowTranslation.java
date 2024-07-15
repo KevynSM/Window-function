@@ -33,11 +33,11 @@ public class WindowTranslation {
      */
     private List<Translation> getWindowValues(LocalDateTime moment) {
         // Update the list to drop the elements on the left side of the window
-        this.translationList = dropOldElements(this.translationList, moment);
+        translationList = dropOldElements(this.translationList, moment);
 
         // Return only the elements inside the window
         // The takeWhile method stops as soon as the first element doesn't pass the condition
-        return this.translationList.stream()
+        return translationList.stream()
                 .takeWhile(translation -> isWithinWindowSize(moment, translation))
                 .toList();
     }
